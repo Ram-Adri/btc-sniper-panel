@@ -1,0 +1,57 @@
+async function estrategiaPlusUno() {
+  try {
+    const res = await fetch("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=10");
+    const data = await res.json();
+    const cierres = data.map(c => parseFloat(c[4]));
+    const precioActual = cierres[cierres.length - 1];
+    const target = +(precioActual * 1.01).toFixed(2);
+    const diferencia = target - precioActual;
+    
+    // Calcular velocidad (momentum): % subida por minuto
+    let subidas = [];
+    for (let i = 1; i < cierres.length; i++) {
+      const diff = cierres[i] - cierres[i - 1];
+      if (diff > 0) subidas.push(diff);
+    }
+    const velocidadPromedio = subidas.length ? subidas.reduce((a, b) => a + b) / subidas.length : 0.5;
+    const minutosETA = Math.max(1, Math.round(diferencia / velocidadPromedio));
+    const fechaETA = new Date(Date.now() + minutosETA * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Generar comentario táctico
+    const comentario = velocidadPromedio > 2
+      ? "Entrada sugerida: momentum fuerte en marcos pequeños. Confirmar con volumen."
+      : velocidadPromedio > 1
+      ? "Potencial alcista con impulso moderado. RSI > 65 recomendado antes de entrada."
+      : "Esperar confirmación de vela verde sólida en próximos 5 minutos.";
+
+    // Mostrar en panel
+    document.getElementById("estrategiaPrecio").innerText = `$${precioActual.toFixed(2)}`;
+    document.getElementById("estrategiaTarget").innerText = `$${target}`;
+    document.getElementById("estrategiaETA").innerText = `${minutosETA} min → ${fechaETA}`;
+    document.getElementById("estrategiaProba").innerText = `${Math.min(95, Math.round((subidas.length / 9) * 100))}%`;
+    document.getElementById("comentarioIA").innerText = comentario;
+    document.getElementById("bloqueEstrategia").style.display = "block";
+
+    // Guardar estrategia para evaluación futura
+    const estrategia = {
+      hora: new Date().toISOString(),
+      target: target,
+      etaMinutos: minutosETA,
+      precioInicial: precioActual,
+      comentario,
+      cumplido: false,
+      evaluado: false
+    };
+
+    const estrategias = JSON.parse(localStorage.getItem("estrategiasIA")) || [];
+    estrategias.push(estrategia);
+    localStorage.setItem("estrategiasIA", JSON.stringify(estrategias));
+
+  } catch (e) {
+    console.error("⚠️ Error al calcular estrategia:", e);
+  }
+}
+
+// Ejecutar cada minuto
+estrategiaPlusUno();
+setInterval(estrategiaPlusUno, 60000);

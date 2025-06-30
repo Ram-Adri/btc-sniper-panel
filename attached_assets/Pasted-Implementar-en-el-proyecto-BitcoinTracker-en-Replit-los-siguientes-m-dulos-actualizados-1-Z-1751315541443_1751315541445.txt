@@ -1,0 +1,57 @@
+Implementar en el proyecto "BitcoinTracker" en Replit los siguientes módulos actualizados:
+
+1. **Zonas de Acción dinámicas**:
+   - Reemplazar la tabla estática.
+   - Generar las siguientes filas de forma dinámica cada ciclo:
+     - Nivel: Precio objetivo (+1% actual), tipo: “🎯 Objetivo IA”, acción: “Tomar ganancias si se alcanza”.
+     - Nivel: Precio de entrada proyectado, tipo: “Entrada proyectada IA”, acción: “Evaluar entrada a las [ETA] si momentum se mantiene”.
+     - Nivel: Precio actual, tipo: “🔄 Seguimiento”, acción: “Vigilancia activa”.
+     - Nivel: Soporte detectado (mínimo local), tipo: “Soporte técnico”, acción: “Cortar si hay ruptura con volumen”.
+
+2. **Nota Táctica dinámica**:
+   - Mostrar un resumen como:
+     ```
+     📌 Nota táctica:
+     RSI actual: 68.2
+     MACD: cruzando alcista
+     Momentum: positivo
+     Próxima evaluación: [hora ETA predicha]
+     ```
+
+3. **Indicadores técnicos actualizados**:
+   - RSI (ya incluido)
+   - MACD simulado (calculado como diferencia de medias móviles)
+   - Volumen promedio en últimas 10 velas
+   - Mostrar debajo del gráfico o en módulo lateral
+
+4. **Resumen de estrategia activa**:
+   - Visualizar:
+     - Objetivo +1%
+     - ETA (hora estimada de cumplimiento)
+     - Comentario IA generado dinámicamente
+     - Probabilidad estimada
+
+5. **Control de mensajes flotantes**:
+   - Añadir botón `📥 Minimizar` en cada alerta flotante
+   - Al minimizar, trasladar a una sección fija superior con botón `📤 Restaurar`
+   - Solo un mensaje activo a la vez
+
+6. **Eliminar “Acciones Rápidas”**:
+   - Removerlo del HTML o CSS directamente
+   - Limpiar elementos decorativos innecesarios
+
+7. **Entrenamiento IA**:
+   - Para cada estrategia lanzada:
+     - Registrar: precio actual, target, ETA, timestamp
+     - Evaluar si se cumplió dentro del ETA
+     - Calcular precisión acumulada
+   - Guardar resultados en `localStorage` para persistencia entre sesiones
+
+8. **Interfaz visual uniforme**:
+   - Mantener colores oscuros (#0d1117 fondo, #00ffa2 acentos)
+   - Usar bordes suaves, fuentes limpias y box-shadow suaves para resaltado
+
+Resultado esperado: app táctica de seguimiento BTC operativa, adaptativa y autoevaluada lista para desplegar en Replit, Netlify o GitHub Pages.
+
+Importante: asegurar que los scripts usen CoinGecko o Binance correctamente y que el `setInterval()` no genere sobrecarga o límites de API (usar caché o intervalo ≥60s).
+

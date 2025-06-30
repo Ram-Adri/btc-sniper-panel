@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17.5%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(217, 32%, 17.5%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17.5%);
+  --input: hsl(217, 32%, 17.5%);
+  --primary: hsl(210, 40%, 98%);
+  --primary-foreground: hsl(222, 84%, 4.9%);
+  --secondary: hsl(217, 32%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(212, 92%, 11%);
+  --radius: 0.5rem;
+  
+  /* Trading specific colors */
+  --trading-dark: hsl(222, 84%, 4.9%);
+  --trading-surface: hsl(217, 32%, 17.5%);
+  --trading-border: hsl(215, 27%, 32%);
+  --trading-success: hsl(142, 76%, 36%);
+  --trading-danger: hsl(0, 84%, 60%);
+  --trading-warning: hsl(43, 96%, 56%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17.5%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(217, 32%, 17.5%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17.5%);
+  --input: hsl(217, 32%, 17.5%);
+  --primary: hsl(210, 40%, 98%);
+  --primary-foreground: hsl(222, 84%, 4.9%);
+  --secondary: hsl(217, 32%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(212, 92%, 11%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer utilities {
+  .trading-dark {
+    background-color: var(--trading-dark);
+  }
+  
+  .trading-surface {
+    background-color: var(--trading-surface);
+  }
+  
+  .trading-border {
+    border-color: var(--trading-border);
+  }
+  
+  .trading-success {
+    color: var(--trading-success);
+  }
+  
+  .trading-danger {
+    color: var(--trading-danger);
+  }
+  
+  .trading-warning {
+    color: var(--trading-warning);
+  }
+  
+  .bg-trading-success {
+    background-color: var(--trading-success);
+  }
+  
+  .bg-trading-danger {
+    background-color: var(--trading-danger);
+  }
+  
+  .bg-trading-warning {
+    background-color: var(--trading-warning);
+  }
+  
+  .border-trading-success {
+    border-color: var(--trading-success);
+  }
+  
+  .border-trading-danger {
+    border-color: var(--trading-danger);
+  }
+  
+  .border-trading-warning {
+    border-color: var(--trading-warning);
+  }
+}
+
+/* Trading-specific CSS styles */
+h1, h2 {
+  text-align: center;
+  color: #00ffa2;
+  margin: 20px 0 10px 0;
+}
+
+.tradingview-container {
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+  padding-bottom: 20px;
+}
+
+.tabla-zonas {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: #161b22;
+  border: 1px solid #30363d;
+}
+
+.tabla-zonas th {
+  background: #21262d;
+  color: #58a6ff;
+  padding: 12px;
+  border: 1px solid #30363d;
+}
+
+.tabla-zonas td {
+  padding: 10px;
+  border: 1px solid #30363d;
+  text-align: center;
+}
+
+.verde {
+  color: #00ff88;
+  font-weight: bold;
+}
+
+.rojo {
+  color: #ff6666;
+  font-weight: bold;
+}
+
+.panel-flotante {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #161b22;
+  padding: 15px;
+  border: 1px solid #30363d;
+  width: 260px;
+  font-size: 13px;
+  border-radius: 8px;
+  color: #c9d1d9;
+  box-shadow: 0 0 10px rgba(0,255,160,0.15);
+}
+
+strong {
+  color: #00ffcc;
+}
+
+.predictor-alert {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  background: #0d1117;
+  color: #e6edf3;
+  border: 1px solid #00ffa2;
+  padding: 12px;
+  font-size: 14px;
+  width: 260px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,255,160,0.15);
+}
+
+.aciertos-panel {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #161b22;
+  padding: 12px;
+  border: 1px solid #30363d;
+  color: #00ffa2;
+  font-size: 14px;
+  width: 260px;
+  border-radius: 8px;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-shadow: 0 0 10px rgba(0,255,160,0.15);
+}
+
+.estrategia-activa {
+  background: #1b1f23;
+  color: #e6edf3;
+  border-left: 4px solid #00ffa2;
+  padding: 15px;
+  margin: 20px auto;
+  width: 90%;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 255, 160, 0.1);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.strategy-stats-panel {
+  position: fixed;
+  top: 95px;
+  left: 15px;
+  background: #161b22;
+  padding: 10px;
+  border: 1px solid #30363d;
+  color: #00ffa2;
+  font-size: 12px;
+  width: 260px;
+  border-radius: 8px;
+  z-index: 998;
+  backdrop-filter: blur(10px);
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-shadow: 0 0 8px rgba(0,255,160,0.12);
+}
