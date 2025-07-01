@@ -67,7 +67,7 @@ export function useBinanceData(): MarketAnalysis {
       const historial: Prediction[] = JSON.parse(localStorage.getItem("historialIA") || "[]");
       
       historial.push({
-        hora: new Date().toISOString(),
+        hora: new Date().toLocaleString("es-BO", { hour12: false }),
         rsi: rsi,
         probabilidad: probability,
         precioEntrada: currentPrice,
@@ -82,82 +82,71 @@ export function useBinanceData(): MarketAnalysis {
   };
 
   const analyzeMarket = async () => {
-    try {
-      setAnalysis(prev => ({ ...prev, isLoading: true, error: null }));
+  try {
+    setAnalysis(prev => ({ ...prev, isLoading: true, error: null }));
 
-      // Obtener datos históricos de Bitcoin a través del proxy CoinGecko
-      const response = await fetch("https://corsproxy.io/?url=https://api.example.com/bitcoin/price-history");
+   const response = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1&interval=hourly");
+if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+const data = await response.json();
+const closes = data.prices.map((p: number[]) => p[1]); // extrae solo el precio de cada entrada
 
-      const data = await response.json();
-      
-      // Extraer precios de cierre
-      const closes = data.map((kline: any) => parseFloat(kline[4]));
-      const currentPrice = closes[closes.length - 1];
-      const previousPrice = closes[closes.length - 2];
-      const priceChange = currentPrice - previousPrice;
+const currentPrice = closes.at(-1) || 0;
+const previousPrice = closes.at(-2) || 0;
+const priceChange = currentPrice - previousPrice;
 
-      // Calcular RSI
-      const rsi = calculateRSI(closes, 14);
+// ...tu cálculo RSI y probabilidad puede seguir tal cual 👇
+const rsi = calculateRSI(closes, 14);
 
-      // Lógica táctica para probabilidad
-      let probability = 50;
-      
-      if (rsi > 65) probability += 10;
-      if (rsi > 70) probability += 15;
-      if (rsi < 30) probability -= 20;
-      if (rsi < 40) probability -= 10;
-      
-      // Factor de tendencia reciente
-      if (priceChange > 0) probability += 5;
-      if (priceChange < 0) probability -= 5;
 
-      // Tendencia general (últimas 5 velas)
-      const recentTrend = closes.slice(-5);
-      const trendUp = recentTrend.filter((price: number, i: number) => 
-        i > 0 && price > recentTrend[i - 1]
-      ).length;
-      
-      if (trendUp >= 3) probability += 8;
-      if (trendUp <= 1) probability -= 8;
+    // Calcular probabilidad táctica
+    let probability = 50;
+    if (rsi > 65) probability += 10;
+    if (rsi > 70) probability += 15;
+    if (rsi < 30) probability -= 20;
+    if (rsi < 40) probability -= 10;
+    if (priceChange > 0) probability += 5;
+    if (priceChange < 0) probability -= 5;
 
-      probability = Math.max(0, Math.min(100, probability));
+    const trendUp = closes.slice(-5).filter((price, i, arr) =>
+      i > 0 && price > arr[i - 1]
+    ).length;
 
-      // Determinar estado técnico
-      const technicalState = 
-        probability > 75 ? "🔥 Impulso fuerte" :
-        probability > 65 ? "✅ Momentum positivo" :
-        probability > 55 ? "🟡 Neutral con sesgo alcista" :
-        probability > 45 ? "⚪ Neutral" :
-        probability > 35 ? "🟠 Débil" :
-        "🔻 Sin confirmación";
+    if (trendUp >= 3) probability += 8;
+    if (trendUp <= 1) probability -= 8;
+    probability = Math.max(0, Math.min(100, probability));
 
-      // Guardar esta predicción en el historial
-      guardarPrediccion(rsi, probability, currentPrice);
+    const technicalState =
+      probability > 75 ? "🔥 Impulso fuerte" :
+      probability > 65 ? "✅ Momentum positivo" :
+      probability > 55 ? "🟡 Neutral con sesgo alcista" :
+      probability > 45 ? "⚪ Neutral" :
+      probability > 35 ? "🟠 Débil" :
+      "🔻 Sin confirmación";
 
-      setAnalysis({
-        rsi,
-        probability,
-        technicalState,
-        currentPrice,
-        priceChange,
-        isLoading: false,
-        error: null
-      });
+    guardarPrediccion(rsi, probability, currentPrice);
 
-    } catch (error) {
-      console.error("Error obteniendo datos de Bitcoin:", error);
-      setAnalysis(prev => ({
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : "Error de conexión"
-      }));
-    }
-  };
+    setAnalysis({
+      rsi,
+      probability,
+      technicalState,
+      currentPrice,
+      priceChange,
+      isLoading: false,
+      error: null
+    });
+
+  } catch (error: any) {
+   console.error("Error obteniendo datos del mercado:", error.message);
+setAnalysis(prev => ({
+  ...prev,
+  isLoading: false,
+  error: "Error al conectar con CoinGecko"
+}));
+
+  }
+};
+
 
   useEffect(() => {
     // Ejecutar inmediatamente
