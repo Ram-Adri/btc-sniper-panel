@@ -86,7 +86,7 @@ export function useBinanceData(): MarketAnalysis {
       setAnalysis(prev => ({ ...prev, isLoading: true, error: null }));
 
       // Obtener datos históricos de Bitcoin a través del proxy CoinGecko
-      const response = await fetch("/api/bitcoin/price-history");
+      const response = await fetch("/corsproxy.io/?/api/bitcoin/price-history");
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
